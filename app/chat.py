@@ -1,9 +1,9 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+from cache_db import get_cached_response, save_to_cache
 
-from main import save_prompt
+MODEL_DIR = r"C:/Users/admin/Desktop/UMass/summer_project/distilgpt2_local"   
 
-MODEL_DIR = r"d:/CSE/models/distilgpt2"
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
 model = AutoModelForCausalLM.from_pretrained(MODEL_DIR)
@@ -11,15 +11,20 @@ model = AutoModelForCausalLM.from_pretrained(MODEL_DIR)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
 
-print("Chat with distilgpt2. Type 'exit' to quit.\n")
+print("Chat here. Type 'exit' to quit.\n")
 
 while True:
-    user = input("You: ")
-    save_prompt(user)
-    if user.strip().lower() == "exit":
+    user_question = input("You: ")
+
+    if user_question.strip().lower() == "exit":
         break
 
-    inputs = tokenizer(user, return_tensors="pt").to(device)
+    cached = get_cached_response(user_question)
+    if cached:
+        print(f"Bot (cached): {cached}\n")
+        continue
+
+    inputs = tokenizer(user_question, return_tensors="pt").to(device)
 
     output_ids = model.generate(
         **inputs,
@@ -32,14 +37,17 @@ while True:
 
     full_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
-    # If the model echoed the prompt, cut it off, otherwise keep everything
-    if full_text.startswith(user):
-        reply = full_text[len(user):]
+
+    if full_text.startswith(user_question):
+        reply = full_text[len(user_question):]
     else:
         reply = full_text
 
     reply = reply.strip()
+
     if not reply:
-        reply = "[model only produced whitespace 🤷]"
+        reply = "[model produced only whitespace]"
 
     print(f"Bot: {reply}\n")
+
+    save_to_cache(user_question, reply)
