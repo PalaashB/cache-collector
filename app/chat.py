@@ -21,7 +21,7 @@ while True:
 
     cached = get_cached_response(user_question)
     if cached:
-        print(f"Bot (cached): {cached}\n")
+        print(f"Bot: {cached}\n")
         continue
 
     inputs = tokenizer(user_question, return_tensors="pt").to(device)
