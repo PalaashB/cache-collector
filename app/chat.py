@@ -1,6 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
+from main import save_prompt
+
 MODEL_DIR = r"d:/CSE/models/distilgpt2"
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
@@ -13,6 +15,7 @@ print("Chat with distilgpt2. Type 'exit' to quit.\n")
 
 while True:
     user = input("You: ")
+    save_prompt(user)
     if user.strip().lower() == "exit":
         break
 
