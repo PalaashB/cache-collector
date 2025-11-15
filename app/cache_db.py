@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_PATH = "./cache.db"
+DB_PATH = "./data/cache.db"
 
 
 def create_table():
