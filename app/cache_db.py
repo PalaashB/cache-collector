@@ -1,7 +1,10 @@
 import sqlite3
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
 
 DB_PATH = "./data/cache.db"
-
+embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 def create_table():
     conn = sqlite3.connect(DB_PATH)
@@ -10,7 +13,8 @@ def create_table():
     cur.execute("""
         CREATE TABLE IF NOT EXISTS cache (
             prompt TEXT PRIMARY KEY,
-            response TEXT
+            response TEXT,
+            vect BLOB
         );
     """)
 
@@ -19,10 +23,6 @@ def create_table():
 
 
 def get_cached_response(prompt: str):
-    """
-    Returns the cached response for the given prompt.
-    If not found, returns None.
-    """
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
@@ -36,17 +36,18 @@ def get_cached_response(prompt: str):
     return None
 
 
-def save_to_cache(prompt: str, response: str):
-    """
-    Saves or updates the prompt-response pair in the cache.
-    """
+def save_to_cache(prompt: str, response: str, vect):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
+
+    #embedding convert
+    vect_to_byte= vect.tobytes()
+
     cur.execute("""
-        INSERT OR REPLACE INTO cache (prompt, response)
-        VALUES (?, ?);
-    """, (prompt, response))
+        INSERT OR REPLACE INTO cache (prompt, response, vect)
+        VALUES (?, ?, ?);
+    """, (prompt, response, vect_to_byte))
 
     conn.commit()
     conn.close()
@@ -54,3 +55,4 @@ def save_to_cache(prompt: str, response: str):
 
 
 create_table()
+

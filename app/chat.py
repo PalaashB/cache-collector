@@ -2,8 +2,15 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 from cache_db import get_cached_response, save_to_cache
 
-MODEL_DIR = r"C:/Users/admin/Desktop/UMass/summer_project/distilgpt2_local"   
 
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+
+MODEL_DIR = r"C:/Users/admin/Desktop/UMass/summer_project/distilgpt2_local"   
+# embedder info 
+
+embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
 model = AutoModelForCausalLM.from_pretrained(MODEL_DIR)
@@ -50,4 +57,7 @@ while True:
 
     print(f"Bot: {reply}\n")
 
-    save_to_cache(user_question, reply)
+
+    vect= embedder.encode(user_question)
+    
+    save_to_cache(user_question, reply, vect)
