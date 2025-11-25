@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
-from cache_db import get_cached_response, save_to_cache
+from cache_db import get_cached_response, save_to_cache, cosine_sim
 
 
 from sentence_transformers import SentenceTransformer
@@ -61,3 +61,6 @@ while True:
     vect= embedder.encode(user_question)
     
     save_to_cache(user_question, reply, vect)
+
+
+    

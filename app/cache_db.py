@@ -26,8 +26,21 @@ def get_cached_response(prompt: str):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
+    promtvector=embedder.encode(prompt)
+
     cur.execute("SELECT response FROM cache WHERE prompt = ?;", (prompt,))
     row = cur.fetchone()
+
+
+
+    for i in row:
+        if cosine_sim(i,promtvector) > 0.85: #tweak
+            return 
+
+
+    
+
+
 
     conn.close()
 
@@ -52,6 +65,20 @@ def save_to_cache(prompt: str, response: str, vect):
     conn.commit()
     conn.close()
 
+def cosine_sim(vect1, vect2):
+    vect1=np.array(vect1)
+    vect2=np.array(vect2)
+
+    dot = np.dot(vect1, vect2)
+    norm1 = np.linalg.norm(vect1)
+    norm2 = np.linalg.norm(vect2)
+
+    if norm1 == 0 or norm2 == 0:
+        return 0.0  
+    
+    sim= dot/(norm1*norm2)
+
+    return sim
 
 
 create_table()
