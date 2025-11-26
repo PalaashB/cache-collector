@@ -27,7 +27,7 @@ while True:
         break
 
     cached = get_cached_response(user_question)
-    if cached:
+    if cached!=None:
         print(f"Bot: {cached}\n")
         continue
 

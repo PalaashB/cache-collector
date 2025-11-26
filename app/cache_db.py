@@ -53,10 +53,10 @@ def get_cached_response(prompt: str):
 
 
 
-    for i in vectors:
-        if cosine_sim(promptvector, i) > 0.85:
-            return responses[vectors.index(i)]
-            
+    for idx, vec in enumerate(vectors):
+        if cosine_sim(promptvector, vec) > 0.5:   # tweak threshold ******************
+            return responses[idx]
+              
     return None
 
 
