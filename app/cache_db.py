@@ -26,26 +26,37 @@ def get_cached_response(prompt: str):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
-    promtvector=embedder.encode(prompt)
+    # promptvector=embedder.encode(prompt)
 
-    cur.execute("SELECT response FROM cache WHERE prompt = ?;", (prompt,))
-    row = cur.fetchone()
-
-
-
-    for i in row:
-        if cosine_sim(i,promtvector) > 0.85: #tweak
-            return 
+    # cur.execute("SELECT response FROM cache WHERE prompt = ?;", (prompt,))
+    # row = cur.fetchone()
 
 
+
+    # for i in row:
+    #     if cosine_sim(i,promtvector) > 0.85: #tweak
+    #         return 
+
+    promptvector=embedder.encode(prompt)
     
+    cur.execute("SELECT response, vect FROM cache")
+    lis= cur.fetchall()
+
+    vectors = []
+
+    responses= []   #creating lists to compare vectors and fetch response
+
+    for response, blob in lis:
+        vec = np.frombuffer(blob, dtype=np.float32)  
+        vectors.append(vec)
+        responses.append(response)
 
 
 
-    conn.close()
-
-    if row:
-        return row[0]
+    for i in vectors:
+        if cosine_sim(promptvector, i) > 0.85:
+            return responses[vectors.index(i)]
+            
     return None
 
 
