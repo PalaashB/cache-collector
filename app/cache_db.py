@@ -4,7 +4,7 @@ import numpy as np
 
 
 DB_PATH = "./data/cache.db"
-embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
 
 def create_table():
     conn = sqlite3.connect(DB_PATH)
@@ -36,7 +36,7 @@ def get_cached_response(prompt: str):
     # for i in row:
     #     if cosine_sim(i,promtvector) > 0.85: #tweak
     #         return 
-
+    embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     promptvector=embedder.encode(prompt)
     
     cur.execute("SELECT response, vect FROM cache")
@@ -54,7 +54,7 @@ def get_cached_response(prompt: str):
 
 
     for idx, vec in enumerate(vectors):
-        if cosine_sim(promptvector, vec) > 0.5:   # tweak threshold ******************
+        if cosine_sim(promptvector, vec) > 0.8:   # tweak threshold ******************
             return responses[idx]
               
     return None

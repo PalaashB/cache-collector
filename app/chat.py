@@ -7,9 +7,9 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 
-MODEL_DIR = r"C:/Users/admin/Desktop/UMass/summer_project/distilgpt2_local"   
-# embedder info 
+MODEL_DIR = r"C:/Users/admin/Desktop/UMass/summer_project/distilgpt2_local"    # model download location 
 
+# embedder info 
 embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
