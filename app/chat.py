@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 from cache_db import get_cached_response, save_to_cache, cosine_sim
+import time
 
 
 from sentence_transformers import SentenceTransformer
