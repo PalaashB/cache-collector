@@ -88,3 +88,26 @@ Columns:
 ## How to Run
 
 1. Install required dependencies  
+    ```bash
+    pip install -r requirements.txt
+
+2. Download DistilGPT-2 locally
+
+3. Update the model path in chat.py (line 11)
+
+4. Run the project
+
+---
+
+## Contributors
+
+- Palaash Bhathena  
+  GitHub: https://github.com/PalaashB
+
+- Contributor Name  
+  GitHub: https://github.com/Abhineer
+
+
+## License
+
+MIT
