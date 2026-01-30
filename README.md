@@ -104,7 +104,7 @@ Columns:
 - Palaash Bhathena  
   GitHub: https://github.com/PalaashB
 
-- Contributor Name  
+- Adii Singh 
   GitHub: https://github.com/Abhineer
 
 
