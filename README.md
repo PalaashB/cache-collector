@@ -105,7 +105,7 @@ Columns:
   GitHub: https://github.com/PalaashB
 
 - Adii Singh  
-  GitHub: https://github.com/Abhineer
+  GitHub: https://github.com/Abhineeer
 
 
 
